@@ -1,0 +1,49 @@
+[package]
+name = "avr-rust"
+version = "0.1.0"
+authors = ["Alexey Medvedchikov <alexey.medvedchikov@gmail.com>"]
+edition = "2018"
+license = "Apache-2.0"
+
+[[bin]]
+name = "avr-rust"
+test = false
+bench = false
+
+[dependencies]
+panic-halt = "0.2.0"
+embedded-hal = "0.2.3"
+ufmt = "0.1.0"
+nb = "1.0.0"
+shared-bus = "0.2.2"
+
+[dependencies.avr-device]
+version = "0.3.2"
+features = ["rt"]
+
+[dependencies.avr-hal-generic]
+git = "https://github.com/rahix/avr-hal"
+rev = "392a32b770679cd216e7586d86a3c8ca252e6f64"
+
+[dependencies.atmega-hal]
+git = "https://github.com/rahix/avr-hal"
+rev = "392a32b770679cd216e7586d86a3c8ca252e6f64"
+features = ["atmega168"]
+
+[dependencies.mcp7940m]
+path = "mcp7940m"
+
+[dependencies.pcf8574lcd]
+path = "pcf8574lcd"
+
+[profile.dev]
+panic = "abort"
+lto = true
+opt-level = "s"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+debug = false
+lto = true
+opt-level = "s"

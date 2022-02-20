@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-ELF_FILE=target/avr-atmega168/release/avr-rust.elf
+ELF_FILE=$1
 
 avr-objcopy -j .text -j .data -O ihex "$ELF_FILE" object.hex
 avr-objcopy -j .eeprom --set-section-flags=.eeprom=alloc,load \

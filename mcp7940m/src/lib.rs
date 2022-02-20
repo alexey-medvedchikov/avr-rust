@@ -27,6 +27,10 @@ where
         Device { i2c, addr }
     }
 
+    pub fn destroy(self) -> I2C {
+        self.i2c
+    }
+
     read_write_register!(read_rtcsec, write_rtcsec, Reg::RtcSec, RtcSec);
     read_write_register!(read_rtcmin, write_rtcmin, Reg::RtcMin, RtcMin);
     read_write_register!(read_rtchour, write_rtchour, Reg::RtcHour, RtcHour);

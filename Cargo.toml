@@ -12,22 +12,22 @@ bench = false
 
 [dependencies]
 panic-halt = "0.2.0"
-embedded-hal = "0.2.3"
+embedded-hal = "0.2.7"
 ufmt = "0.1.0"
 nb = "1.0.0"
-shared-bus = "0.2.2"
+shared-bus = "0.2.4"
 
 [dependencies.avr-device]
-version = "0.3.2"
+version = "0.3.3"
 features = ["rt"]
 
 [dependencies.avr-hal-generic]
 git = "https://github.com/rahix/avr-hal"
-rev = "392a32b770679cd216e7586d86a3c8ca252e6f64"
+rev = "4f8ab2594d4497bdfbd57b641c05c407f3b309f5"
 
 [dependencies.atmega-hal]
 git = "https://github.com/rahix/avr-hal"
-rev = "392a32b770679cd216e7586d86a3c8ca252e6f64"
+rev = "4f8ab2594d4497bdfbd57b641c05c407f3b309f5"
 features = ["atmega168"]
 
 [dependencies.mcp7940m]

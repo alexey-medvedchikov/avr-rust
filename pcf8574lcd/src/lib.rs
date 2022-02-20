@@ -1,37 +1,38 @@
 #![no_std]
 
-use embedded_hal::blocking::delay::{DelayMs, DelayUs};
+use embedded_hal::blocking::delay::DelayUs;
 use embedded_hal::blocking::i2c::Write;
 
-pub struct Device<I2C, DELAY> {
+pub struct Device<I2C> {
     i2c: I2C,
-    delay: DELAY,
     addr: u8,
     display_cols: u8,
     flags: Flag,
 }
 
-impl<I2C, DELAY, E> Device<I2C, DELAY>
+impl<I2C, E> Device<I2C>
 where
     I2C: Write<Error = E>,
-    DELAY: DelayMs<u8> + DelayUs<u8>,
 {
-    pub fn new(i2c: I2C, delay: DELAY, addr: u8, display_cols: u8) -> Self {
+    pub fn new(i2c: I2C, addr: u8, display_cols: u8) -> Self {
         Device {
             i2c,
-            delay,
             addr,
             display_cols,
             flags: 0,
         }
     }
 
-    pub fn init(&mut self) -> Result<(), E> {
-        self.delay.delay_ms(20);
+    pub fn destroy(self) -> I2C {
+        self.i2c
+    }
+
+    pub fn init(&mut self, delay: &mut impl DelayUs<u16>) -> Result<(), E> {
+        delay.delay_us(20_000 as u16);
         self.write_nibble(0x03, 0x00)?;
-        self.delay.delay_ms(5);
+        delay.delay_us(5_000 as u16);
         self.write_nibble(0x03, 0x00)?;
-        self.delay.delay_us(150);
+        delay.delay_us(150 as u16);
         self.write_nibble(0x03, 0x00)?;
         self.write_nibble(0x02, 0x00)
     }
@@ -97,7 +98,7 @@ where
             2 => 0x00 + self.display_cols,
             _ => 0x00,
         };
-        let nibble = 0x80 | (base_addr | col);
+        let nibble = 0x80 | (base_addr + col);
         self.write(nibble, self.flags)
     }
 }
@@ -106,7 +107,7 @@ pub const DEFAULT_DEVICE_ADDR: u8 = 0x27;
 
 type Flag = u8;
 const REG_DATA: Flag = 0x01;
-pub const FLAG_ENABLE: Flag = 0x04;
+const FLAG_ENABLE: Flag = 0x04;
 pub const FLAG_BACKLIGHT: Flag = 0x08;
 pub const FLAG_NOBACKLIGHT: Flag = 0x00;
 
